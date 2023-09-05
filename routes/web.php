@@ -4,7 +4,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
-use App\Orchid\Screens\EmailSenderScreen;
+use App\Http\Controllers\ServiceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,3 +26,5 @@ Route::get('/login', [LoginController::class, 'show'])->middleware('guest')->nam
 Route::post('/login', [LoginController::class, 'login']);
 Route::get('/logout', [LogoutController::class, 'perform']);
 Route::get('/home', [HomeController::class, 'index']);
+Route::get('/service', [ServiceController::class, 'index']);
+Route::get('/service', [ServiceController::class, 'show']);

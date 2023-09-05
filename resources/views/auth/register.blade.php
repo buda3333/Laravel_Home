@@ -8,12 +8,12 @@
 <form action="{{ route('register.perform') }}" method="post">
     @csrf
     <div class="container">
-    <label>Username</label> <label style="color: #4b1010">@error('username') {{ $message }} @enderror</label>
-    <input type="text" name="username" value="{{ old('username') }}" placeholder="Enter Username">
+    <label>Username</label> <label style="color: #4b1010">@error('name') {{ $message }} @enderror</label>
+    <input type="text" name="name" value="{{ old('name') }}" placeholder="Enter Username">
     <label>Email</label> <label style="color: #4b1010">@error('email') {{ $message }} @enderror</label>
     <input type="text" name="email" value="{{ old('email') }}" placeholder="Enter Email">
-    <label>Telephone</label> <label style="color: #4b1010">@error('telephone') {{ $message }} @enderror</label>
-    <input type="text" name="telephone" placeholder="Enter your phone number">
+    <label>Phone</label> <label style="color: #4b1010">@error('phone') {{ $message }} @enderror</label>
+    <input type="text" name="phone" placeholder="Enter your phone number">
     <label>Password</label> <label style="color: #4b1010">@error('password') {{ $message }} @enderror</label>
     <input type="password" name="password" placeholder="Enter Password">
     <label>Password Confirmation</label> <label style="color: #4b1010">@error('password_confirmation') {{ $message }} @enderror</label>

@@ -79,6 +79,11 @@ class PlatformProvider extends OrchidServiceProvider
                 ->target('_blank')
                 ->badge(fn () => Dashboard::version(), Color::DARK()),
 
+            Menu::make('Услуги')
+                ->icon('bag')
+                ->route('platform.services')
+                ->title('Клиенты'),
+
             Menu::make(__('Users'))
                 ->icon('user')
                 ->route('platform.systems.users')

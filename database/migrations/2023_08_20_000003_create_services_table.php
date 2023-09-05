@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('name')->unique();
             $table->integer('price');
             $table->text('description');
-            $table->boolean('is_active');
+            $table->boolean('is_active')->default(1);
             $table->timestamps();
         });
     }

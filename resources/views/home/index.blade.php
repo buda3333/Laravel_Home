@@ -3,13 +3,11 @@
 <div class="bg-light p-5 rounded">
 
 @auth
-<p>Name: {{ Auth::user()->username }}</p>
+<p>Name: {{ Auth::user()->name }}</p>
 <p>Email: {{ Auth::user()->email }}</p>
-<p>Phone: {{ Auth::user()->telephone }}</p>
+<p>Phone: {{ Auth::user()->phone }}</p>
 @endauth
-@guest
-<p class="lead">Пожалуйста, войдите в систему, чтобы просмотреть данные с ограниченным доступом.</p>
-@endguest
+
 </div>
 <head>
     <meta charset="utf-8">
@@ -224,6 +222,13 @@
                 <h2>
                     НАШ
                 </h2>
+                {{--@foreach ($services as $service)
+                    <tr>
+                        <td>{{ $service->name }}</td>
+                        <td>{{ $service->price }}</td>
+                        <td>{{ $service->description }}</td>
+                    </tr>
+                @endforeach--}}
                 <ion-icon name="remove-outline"  class="line"></ion-icon>
             </section>
             <section class="allImages">

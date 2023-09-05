@@ -44,6 +44,17 @@ class UserListLayout extends Table
                     ->asyncParameters([
                         'user' => $user->id,
                     ])),
+            TD::make('phone', __('Phone'))
+                ->sort()
+                ->cantHide()
+                ->filter(Input::make())
+                ->render(fn (User $user) => ModalToggle::make($user->phone)
+                    ->modal('asyncEditUserModal')
+                    ->modalTitle($user->presenter()->title())
+                    ->method('saveUser')
+                    ->asyncParameters([
+                        'user' => $user->id,
+                    ])),
 
             TD::make('updated_at', __('Last edit'))
                 ->sort()

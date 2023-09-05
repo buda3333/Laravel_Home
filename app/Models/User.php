@@ -15,6 +15,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'phone',
         'permissions',
     ];
 
@@ -62,4 +63,8 @@ class User extends Authenticatable
         'updated_at',
         'created_at',
     ];
+    public function setPasswordAttribute($value)
+    {
+        $this->attributes['password'] = bcrypt($value);
+    }
 }
