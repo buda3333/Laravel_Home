@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Service>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Specialist>
  */
-class ServiceFactory extends Factory
+class SpecialistFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -18,10 +18,7 @@ class ServiceFactory extends Factory
     {
         return [
             'name' => fake()->name(),
-            'price'=> rand(500,1000),
             'description' => fake()->text(),
-            'is_active' => true
         ];
-
     }
 }

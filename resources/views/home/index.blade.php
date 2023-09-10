@@ -23,21 +23,17 @@
 <body>
 <header>
     <nav>
-        <a href=""><img src="https://ayesha.dropletthemes.com/wp-content/themes/ayesha/images/dark_logo.png" class="logo laptop"><img src="https://ayesha.dropletthemes.com/wp-content/themes/ayesha/images/light_logo.png" class=" logo tablet"></a>
         <ul>
-            <li><a href="">Home</a></li>
-            <li><a href="">About</a></li>
-            <li><a href="">Services</a></li>
-            <li><a href="">Lookbook</a></li>
-            <li><a href="">News</a></li>
-            <li><a href="">Shop</a></li>
+            <li><a href="/home">Home</a></li>
+            <li><a href="/specialist">Specialists</a></li>
+            <li><a href="/service">Services</a></li>
             <li><a href="">Contact</a></li>
             <li><a href=""><ion-icon name="search-outline" class="iconNothing"></ion-icon></a></li>
             <li><a href=""><ion-icon name="bag-handle-outline" class="iconNothing"></ion-icon></a></li>
         </ul>
         <a href=""><ion-icon name="reorder-three-outline" class="tablet mobile threeLines"></ion-icon></a>
         @auth
-        <a href="/logout" class="book">Выйти</a>
+            <a href="/logout" class="book">Выйти</a>
         @endauth
         @guest
         <a href="/login" class="book">Вход</a>
@@ -58,19 +54,7 @@
                     Разделите свою уникальность
                 </h5>
             </section>
-            <button class="black">
-                <ion-icon name="ellipsis-horizontal" class="iconNothing whiteColor"></ion-icon> Our Services
-            </button>
-            <aside class="callToAction black">
-            <span>
-              Your First Visit?
-            <span>
-            <span class="coupon">
-              -20% for the first classic hair coloring
-            </span>
-            <button class="white">
-              <ion-icon name="ellipsis-horizontal" class="iconNothing whiteColor"></ion-icon> Book Online
-            </button>
+
         </section>
     </section>
     </section>
@@ -141,59 +125,26 @@
             </h2>
             <ion-icon name="remove-outline" class="line"></ion-icon>
         </section>
-        <section class="allImages">
-            <section class="stylistImgWrapper">
-                <img src="https://ayesha.dropletthemes.com/wp-content/uploads/2019/08/Styler-01.jpg" class="stylistImg">
-                <section class="stylistSocialMedia">
-                    <ion-icon name="logo-twitter" class="iconBlack"></ion-icon>
-                    <ion-icon name="logo-facebook" class="iconBlack"></ion-icon>
-                    <ion-icon name="logo-instagram" class="iconBlack"></ion-icon>
-                </section>
-                <section class="stylistText">
-                    <h5>
-                        Alisha Williams
-                    </h5>
-                    <span>
-                - Styler
-              </span>
-                </section>
-            </section>
-
-            <section class="stylistImgWrapper">
-                <img src="https://ayesha.dropletthemes.com/wp-content/uploads/2019/08/Styler-02.jpg" class="stylistImg">
-                <section class="stylistSocialMedia">
-                    <ion-icon name="logo-twitter" class="iconBlack"></ion-icon>
-                    <ion-icon name="logo-facebook" class="iconBlack"></ion-icon>
-                    <ion-icon name="logo-instagram" class="iconBlack"></ion-icon>
-                </section>
-                <section class="stylistText">
-                    <h5>
-                        Alisha Williams
-                    </h5>
-                    <span>
-                - Styler
-              </span>
-                </section>
-            </section>
-
+        @foreach ($specialists as $specialist)
             <section class="stylistImgWrapper">
                 <img src="https://ayesha.dropletthemes.com/wp-content/uploads/2019/08/Styler-03.jpg" class="stylistImg">
                 <section class="stylistSocialMedia">
-                    <ion-icon name="logo-twitter" class="iconBlack"></ion-icon>
-                    <ion-icon name="logo-facebook" class="iconBlack"></ion-icon>
-                    <ion-icon name="logo-instagram" class="iconBlack"></ion-icon>
+                    <h5>{{ $specialist->description }}</h5>
+                    <button class="black">
+                        {{--<a href="/service/{{$specialist->id}}">подробнее</a>--}}
+                    </button>
                 </section>
                 <section class="stylistText">
                     <h5>
-                        Alisha Williams
+                        {{ $specialist->name }}
                     </h5>
-                    <span>
-                  - Styler
-                </span>
                 </section>
             </section>
-        </section>
-    </section>
+
+        @endforeach
+        <button class="black">
+            <a href="/specialist" class="book">Все Специалисты</a>
+        </button>
     </section>
     </section>
 
@@ -220,39 +171,31 @@
         <section class="contentWrapper">
             <section class="text">
                 <h2>
-                    НАШ
+                    Наши Услуги
                 </h2>
-                {{--@foreach ($services as $service)
-                    <tr>
-                        <td>{{ $service->name }}</td>
-                        <td>{{ $service->price }}</td>
-                        <td>{{ $service->description }}</td>
-                    </tr>
-                @endforeach--}}
-                <ion-icon name="remove-outline"  class="line"></ion-icon>
-            </section>
-            <section class="allImages">
-                <section class="imgColumn">
-                    <section class="imgSquare imgOne">
+                @foreach ($services as $service)
+                <section class="stylistImgWrapper">
+                    <img src="https://ayesha.dropletthemes.com/wp-content/uploads/2019/08/Styler-03.jpg" class="stylistImg">
+                    <section class="stylistSocialMedia">
+                        <h5>{{ $service->description }}</h5>
+                        <button class="black">
+                        <a href="/service/{{$service->id}}">подробнее</a>
+                        </button>
                     </section>
-                    <section class="imgRectangle imgTwo">
-                    </section>
-                </section>
-                <section class="imgColumn">
-                    <section class="imgRectangle imgThree">
-                    </section>
-                    <section class="imgSquare imgFour">
+                    <section class="stylistText">
+                        <h5>
+                        {{ $service->name }}
+                        </h5>
+                        <h5>
+                            <p>Цена:{{ $service->price }} рублей</p>
+                        </h5>
                     </section>
                 </section>
-                <section class="imgColumn">
-                    <section class="imgSquare imgFive">
-                    </section>
-                    <section class="imgRectangle imgSix">
-                    </section>
-                </section>
-            </section>
-        </section>
-        <section>
+
+    @endforeach
+                <button class="black">
+                    <a href="/service" class="book">Все услуги</a>
+                </button>
 </main>
 
 
@@ -263,7 +206,7 @@
             О нас
         </h3>
         <p>
-            Салон красоты "LazerHome" - это перспектива.
+            Салон красоты "LazerHome".
         </p>
         <section class="socialMedia">
             <ion-icon name="logo-twitter" class="whiteIcon" class="iconBlack"></ion-icon>
@@ -678,11 +621,11 @@
         height: 480px;
         position: relative;
         text-align: center;
-        padding: 60% 0 30% 0;
+        padding: 20% 0 30% 0;
         right: -20px;
         opacity: 0;
         top: -462px;
-        transition: opacity 0.5s;
+        transition: opacity 0.1s;
     }
 
     .stylistText{
