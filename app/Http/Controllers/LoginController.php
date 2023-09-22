@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use App\Http\Requests\LoginRequest;
 use Illuminate\Support\Facades\Auth;
@@ -12,7 +15,7 @@ class LoginController extends Controller
     /**
      * Display login page.
      *
-     * @return Renderable
+     * @return Application|Factory|View
      */
     public function show()
     {
@@ -24,7 +27,7 @@ class LoginController extends Controller
      *
      * @param LoginRequest $request
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function login(LoginRequest $request)
     {
@@ -48,7 +51,7 @@ class LoginController extends Controller
      * @param Request $request
      * @param Auth $user
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     protected function authenticated(Request $request, $user)
     {

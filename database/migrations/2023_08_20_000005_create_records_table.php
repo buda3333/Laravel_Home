@@ -15,13 +15,13 @@ return new class extends Migration
     {
         Schema::create('records', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users');
+            $table->string('name');
+            $table->foreignId('user_id')->nullable()->constrained('users');
             $table->foreignId('specialist_id')->constrained('specialists');
             $table->foreignId('service_id')->constrained('services');
-            $table->date('date');
-            $table->time('time');
+            $table->datetime('datetime');
             $table->enum('status', ['completed', 'cancelled','adopted'])->default('adopted');
-            $table->unique(['specialist_id','user_id','service_id','date','time']);
+            $table->unique(['specialist_id','service_id','datetime']);
             $table->timestamps();
         });
     }

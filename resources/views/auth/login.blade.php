@@ -26,12 +26,13 @@
 
 <style>
     @import url('https://fonts.googleapis.com/css?family=Montserrat:400,500&display=swap');
-
     body {
-        font-family: Montserrat,Arial, Helvetica, sans-serif;
-        background-color:#f7f7f7;
+        font-family: Arial, sans-serif;
+        background-image: url('https://ayesha.dropletthemes.com/wp-content/uploads/2019/08/aeaeaeaeaeae.jpg');
+        background-size: cover; /* This will cover the entire viewport */
+        background-repeat: no-repeat; /* Prevents the image from repeating */
+        background-attachment: fixed; /* Keeps the image fixed while scrolling */
     }
-    * {box-sizing: border-box}
 
     /* Add padding to container elements */
     .container {

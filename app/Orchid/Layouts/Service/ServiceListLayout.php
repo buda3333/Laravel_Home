@@ -4,35 +4,40 @@ declare(strict_types=1);
 
 namespace App\Orchid\Layouts\Service;
 
-use Orchid\Screen\Field;
+use App\Models\Service;
+use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Input;
-use Orchid\Screen\Layouts\Rows;
+use Orchid\Screen\Layouts\Table;
+use Orchid\Screen\TD;
 
-class ServiceListLayout extends Rows
+class ServiceListLayout extends Table
 {
     /**
-     * The screen's layout elements.
-     *
-     * @return Field[]
+     * @var string
      */
-    public function fields(): array
+    public $target = 'services';
+
+    /**
+     * @return TD[]
+     */
+    public function columns(): array
     {
         return [
-            Input::make('service.name')
-                ->type('text')
-                ->max(255)
-                ->required()
-                ->title(__('Name'))
-                ->placeholder(__('Name'))
-                ->help(__('Service display name')),
+            TD::make('name', __('Name'))
+                ->sort()
+                ->cantHide()
+                ->filter(Input::make())
+                ->render(fn (Service $service) => Link::make($service->name)
+                    ->route('platform.systems.services.edit', $service->id)),
 
-            Input::make('service.price')
-                ->type('text')
-                ->max(255)
-                ->required()
-                ->title(__('Price'))
-                ->placeholder(__('Price'))
-                ->help(__('Actual Price in the system')),
+            TD::make('description', __('description'))
+                ->sort()
+                ->cantHide()
+                ->filter(Input::make()),
+
+            TD::make('created_at', __('Created'))
+                ->sort()
+                ->render(fn (Service $service) => $service->created_at->toDateTimeString()),
         ];
     }
 }

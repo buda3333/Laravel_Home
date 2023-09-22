@@ -12,12 +12,14 @@ use App\Orchid\Screens\Examples\ExampleTextEditorsScreen;
 use App\Orchid\Screens\PlatformScreen;
 use App\Orchid\Screens\Role\RoleEditScreen;
 use App\Orchid\Screens\Role\RoleListScreen;
+use App\Orchid\Screens\Service\ServiceEditScreen;
+use App\Orchid\Screens\Service\ServiceListScreen;
 use App\Orchid\Screens\User\UserEditScreen;
 use App\Orchid\Screens\User\UserListScreen;
 use App\Orchid\Screens\User\UserProfileScreen;
 use Illuminate\Support\Facades\Route;
 use Tabuna\Breadcrumbs\Trail;
-use App\Orchid\Screens\Service\ServiceScreen;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -96,5 +98,24 @@ Route::screen('example-charts', ExampleChartsScreen::class)->name('platform.exam
 Route::screen('example-editors', ExampleTextEditorsScreen::class)->name('platform.example.editors');
 Route::screen('example-cards', ExampleCardsScreen::class)->name('platform.example.cards');
 Route::screen('example-advanced', ExampleFieldsAdvancedScreen::class)->name('platform.example.advanced');
-Route::screen('services', ServiceScreen::class)->name('platform.services');
-//Route::screen('idea', Idea::class, 'platform.screens.idea');
+
+// Platform > System > Roles > Role
+Route::screen('services/{service}/edit', ServiceEditScreen::class)
+    ->name('platform.systems.services.edit')
+    ->breadcrumbs(fn (Trail $trail, $service) => $trail
+        ->parent('platform.systems.services')
+        ->push($service->name, route('platform.systems.services.edit', $service)));
+
+// Platform > System > Roles > Create
+Route::screen('service/create', ServiceEditScreen::class)
+    ->name('platform.systems.services.create')
+    ->breadcrumbs(fn (Trail $trail) => $trail
+        ->parent('platform.systems.services')
+        ->push(__('Create'), route('platform.systems.services.create')));
+
+// Platform > System > Roles
+Route::screen('services', ServiceListScreen::class)
+    ->name('platform.systems.services')
+    ->breadcrumbs(fn (Trail $trail) => $trail
+        ->parent('platform.index')
+        ->push(__('Services'), route('platform.systems.services')));

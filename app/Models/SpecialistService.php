@@ -5,14 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Record extends Model
+class SpecialistService extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'user_id',
-        'name',
-        'specialist_id',
         'service_id',
-        'datetime',
+        'specialist_id',
     ];
 }

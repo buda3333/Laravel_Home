@@ -1,13 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <div class="bg-light p-5 rounded">
-
-@auth
-<p>Name: {{ Auth::user()->name }}</p>
-<p>Email: {{ Auth::user()->email }}</p>
-<p>Phone: {{ Auth::user()->phone }}</p>
-@endauth
-
 </div>
 <head>
     <meta charset="utf-8">
@@ -16,10 +9,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800;900&family=Roboto:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
 </head>
-
-
-
-
 <body>
 <header>
     <nav>
@@ -33,16 +22,16 @@
         </ul>
         <a href=""><ion-icon name="reorder-three-outline" class="tablet mobile threeLines"></ion-icon></a>
         @auth
-            <a href="/logout" class="book">Выйти</a>
+            <a href="/logout" >Выйти</a>
+            <a href="/records/{{Auth::user()->id}}" >Все Записи</a>
         @endauth
+        <a href="/record2" >Record</a>
         @guest
-        <a href="/login" class="book">Вход</a>
-        <a href="/registration" class="book">Зарегистрироваться</a>
+        <a href="/login" >Вход</a>
+        <a href="/registration" >Зарегистрироваться</a>
         @endguest
     </nav>
 </header>
-
-
 <main>
     <section class="title">
         <section class="contentWrapper">
@@ -106,7 +95,7 @@
                     Hair Salon volutpat ut nisl in hendrerit. Vestibulum ante ipsum astisul primis in faucibus orci luctus et ultrices posuere cubilia Curaemil Etiam porttitor, lacus in luctus molestie, libero justo ullamcorper nulla, sed lacinia and make the beauty much moe essetful and owner erat metus eget diam. Morbi volutpat lectus sit amet diam vestibioas beauty products
                 </p>
                 <button class="black">
-                    <ion-icon name="ellipsis-horizontal" class="iconNothing whiteColor"></ion-icon> Read More
+                    <a href="/record" class="iconNothing whiteColor">Записаться</a>
                 </button>
             </section>
             <section class="videoImgWrapper">
@@ -130,9 +119,9 @@
                 <img src="https://ayesha.dropletthemes.com/wp-content/uploads/2019/08/Styler-03.jpg" class="stylistImg">
                 <section class="stylistSocialMedia">
                     <h5>{{ $specialist->description }}</h5>
-                    <button class="black">
-                        {{--<a href="/service/{{$specialist->id}}">подробнее</a>--}}
-                    </button>
+                    {{--<button class="black">
+                        --}}{{--<a href="/service/{{$specialist->id}}">подробнее</a>--}}{{--
+                    </button>--}}
                 </section>
                 <section class="stylistText">
                     <h5>
@@ -143,7 +132,7 @@
 
         @endforeach
         <button class="black">
-            <a href="/specialist" class="book">Все Специалисты</a>
+            <a href="/specialist" class="iconNothing whiteColor">Все Специалисты</a>
         </button>
     </section>
     </section>
@@ -194,7 +183,7 @@
 
     @endforeach
                 <button class="black">
-                    <a href="/service" class="book">Все услуги</a>
+                    <a href="/service" class="iconNothing whiteColor">Все услуги</a>
                 </button>
 </main>
 

@@ -18,11 +18,6 @@
         <nav>
             <ul>
                 <li><a href="/home"> Home</a> </li>
-                <li><a href="#"> About</a> </li>
-                <li><a href="#"> Services</a> </li>
-                <li><a href="#"> Lookbook</a> </li>
-                <li><a href="#"> News</a> </li>
-                <li><a href="#"> Contact</a> </li>
             </ul>
         </nav>
         <header>
@@ -41,7 +36,7 @@
                 <section>
                     <h2>{{ $service->name }}<br> {{ $service->description }}</h2>
                     <p></p>
-                    <button class="blkbtn" type="button" name="button"> - READ MORE</button>
+                    <button class="blkbtn" type="button"> <a href="/record" >Записаться</a></button>
                 </section>
                 <img src="https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=1951&q=80" alt="">
             </section>
