@@ -5,15 +5,13 @@ namespace App\Http\Controllers;
 use App\Http\Requests\RecordRequest;
 use App\Models\Record;
 use App\Models\Service;
-use App\Models\Specialist;
 use App\Models\SpecialistService;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
-
+use Nutnet\LaravelSms\SmsSender;
 class RecordControllerNew extends Controller
 {
     /**
@@ -28,12 +26,10 @@ class RecordControllerNew extends Controller
 
     public function index2(RecordRequest $request)
     {
-        $request->session()->put('name',$request->name);
+        $request->session()->put(['name' => $request->name]);
         $services = Service::where('is_active', true)->get();
        return response(view('record.index3', ['services' => $services]));
-
     }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -42,8 +38,8 @@ class RecordControllerNew extends Controller
     public function store(Request $request){
         $service_id = $request->service_id;
         $request->session()->put('service_id',$service_id);
-        $data = SpecialistService::where('service_id', $service_id)->pluck('specialist_id');
-        $specialists = Specialist::whereIn('id', $data)->get();
+        $service = Service::find($service_id);
+        $specialists = $service->specialists;
         return response(view('record.index4', ['specialists' => $specialists]));
     }
 
@@ -54,28 +50,59 @@ class RecordControllerNew extends Controller
      */
     public function store2(Request $request)
     {
-        $request->session()->put('specialist_id',$request->specialist_id);
-        return response(view('record.index5'));
-
-    }
-    public function create(Request $request)
-    {
-        $record = new Record();
-        $name = session('name');
-        $specialist_id = session('specialist_id');
+        $specialist_id = $request->specialist_id;
+        $request->session()->put('specialist_id', $specialist_id);
         $service_id = session('service_id');
-        $datetime = $request->datetime;
-        $record->name = $name;
-        $record->specialist_id = $specialist_id;
-        $record->service_id = $service_id;
-        $record->datetime = $datetime;
-        if (Auth::check()) {
-            $record->user_id = Auth::user()->id;
-        }
-        $record->save();
-
-        return redirect('/home');
+        $specialistService= SpecialistService::where('service_id', $service_id)
+            ->where('specialist_id', $specialist_id)
+            ->with('calendar')->first();
+        $records = Record::where('specialist_id', $specialist_id)->get();
+        $lableCalendars = $specialistService->calendar->reject(function ($calendar) use ($records) {
+            foreach ($records as $record) {
+                if ($calendar->date == $record->date && $calendar->time == $record->time) {
+                    return true;
+                }
+            }
+            return false;
+        });
+        return response(view('record.index5', ['calendars' => $lableCalendars]));
     }
+    public function code(Request $request,SmsSender $smsSender){
+        $phoneNumber = $request->phone;
+        $text=rand(1000,9999);
+        //$smsSender->send($phoneNumber, $text);
+        $request->session()->put(['date' => $request->date,'time' => $request->time, 'phone' => $phoneNumber,'code' => $text,]);
+        print_r($text);
+        return response(view('record.indexCode'));
+    }
+    public function create(Request $request,SmsSender $smsSender){
+        $codeRequest = $request->code;
+        $code = session('code');
+        if ($code == $codeRequest) {
+            $record = new Record();
+            $name = session('name');
+            $phone = session('phone');
+            $specialist_id = session('specialist_id');
+            $service_id = session('service_id');
+            $date = session('date');
+            $time = session('time');
+            $record->name = $name;
+            $record->specialist_id = $specialist_id;
+            $record->service_id = $service_id;
+            $record->date = $date;
+            $record->time = $time;
+            $record->phone = $phone;
+            if (Auth::check()) {
+                $record->user_id = Auth::user()->id;
+            }
+            $record->save();
+            return redirect('/home');
+        } else {
+            $error = "Неверный код";
+            return response(view('record.indexCode', ['error' => $error]));
+        }
+    }
+
     /**
      * Show the form for editing the specified resource.
      *

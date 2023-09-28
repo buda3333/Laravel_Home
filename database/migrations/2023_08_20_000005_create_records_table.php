@@ -19,9 +19,11 @@ return new class extends Migration
             $table->foreignId('user_id')->nullable()->constrained('users');
             $table->foreignId('specialist_id')->constrained('specialists');
             $table->foreignId('service_id')->constrained('services');
-            $table->datetime('datetime');
+            $table->string('phone');
+            $table->date('date');
+            $table->time('time');
             $table->enum('status', ['completed', 'cancelled','adopted'])->default('adopted');
-            $table->unique(['specialist_id','service_id','datetime']);
+            $table->unique(['specialist_id','service_id','date','time']);
             $table->timestamps();
         });
     }

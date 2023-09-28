@@ -13,6 +13,8 @@ class Record extends Model
         'name',
         'specialist_id',
         'service_id',
-        'datetime',
+        'date',
+        'time',
+        'phone',
     ];
 }

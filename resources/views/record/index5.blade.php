@@ -5,16 +5,68 @@
     @csrf
     <h1>Записаться</h1>
     <h3>Ваши Данные</h3>
-    <div class="service-buttons">
-        <label for="preferred_date_time">Preferred Date and Time:</label>
-        <input type="datetime-local" id="preferred_date_time" name="datetime">
+
+    <div class="custom-datetime-input">
+        <label for="date">Дата:</label>
+        <select name="date" id="date">
+        @foreach($calendars->unique('date') as $uniqueCalendar)
+            <option value="{{ $uniqueCalendar->date }}">{{ $uniqueCalendar->date }}</option>
+            @endforeach
+            </select>
+    </div>
+
+    <div class="custom-datetime-input">
+        <label for="time">Время:</label>
+        <select name="time" id="time">
+            @foreach($calendars as $calendar)
+                <option value="{{ $calendar->time }}" data-date="{{ $calendar->date }}">{{ $calendar->time }}</option>
+            @endforeach
+        </select>
+    </div>
+    <div class="pr-dtl">
+        <div class="input-div">
+            <label for="name">Your Phone:</label><label style="color: #4b1010">@error('phone') {{ $message }} @enderror</label>
+            <input type="text" id="phone" name="phone">
         </div>
     </div>
-    <input type="submit" id="submit-btn" value="Записаться">
+
+    <input type="submit" id="submit-btn" value="Продолжить">
 </form>
 <video class="bg-effect" muted autoplay>
     <source src="https://regestrationpage.glitch.me/smoke_video.mp4" type="video/mp4">
 </video>
+<script>
+    const dateSelect = document.getElementById('date');
+    const timeSelect = document.getElementById('time');
+
+    function updateTimeOptions() {
+        const selectedDate = dateSelect.value;
+        const timeOptions = document.querySelectorAll('#time option');
+
+        let firstVisibleOption = null;
+
+        timeOptions.forEach(option => {
+            if (option.dataset.date === selectedDate) {
+                option.style.display = 'block';
+
+                if (!firstVisibleOption) {
+                    firstVisibleOption = option;
+                }
+            } else {
+                option.style.display = 'none';
+            }
+        });
+
+        if (firstVisibleOption) {
+            timeSelect.value = firstVisibleOption.value;
+        } else {
+            timeSelect.value = '';
+        }
+    }
+
+    dateSelect.addEventListener('change', updateTimeOptions);
+    updateTimeOptions();
+</script>
 </body>
 </html>
 <style>
@@ -75,12 +127,12 @@
     }
 
     label {
-        font-size: 18px;
+        font-size: 20px;
     }
 
     input {
         height: 50px;
-        width: 500px;
+        width: 300px;
         background: none;
         padding: 10px;
         border: 2px solid white;
@@ -89,7 +141,7 @@
 
     #submit-btn {
         height: 50px;
-        width: 700px;
+        width: 200px;
         background: none;
         border: 2px solid white;
         transition: 0.5s all;
@@ -237,20 +289,29 @@
     .custom-datetime-input {
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: 30px;
     }
 
     .custom-datetime-input input[type="date"],
-    .custom-datetime-input input[type="text"] {
-        padding: 5px;
+    .custom-datetime-input input[type="time"] {
+        padding: 10px;
         border: 1px solid #ccc;
         border-radius: 5px;
         width: 150px;
         height: 30px;
+        font-size: 48px; /* Increased font size by 3 times */
     }
 
     .custom-datetime-input label {
         font-weight: bold;
-        font-size: 18px;
+        font-size: 50px; /* Increased font size by 3 times */
+    }
+    .custom-datetime-input select {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        width: 170px; /* Увеличена ширина поля */
+        height: 50px; /* Увеличена высота поля */
+        font-size: 24px; /* Увеличен размер шрифта */
     }
 </style>

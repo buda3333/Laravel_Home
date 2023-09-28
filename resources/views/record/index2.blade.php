@@ -9,6 +9,8 @@
         <div class="input-div">
             <label for="name">Your Name:</label><label style="color: #4b1010">@error('name') {{ $message }} @enderror</label>
             <input type="text" id="name" name="name">
+            {{--<label for="name">Your Phone:</label><label style="color: #4b1010">@error('phone') {{ $message }} @enderror</label>
+            <input type="text" id="phone" name="phone">--}}
         </div>
     </div>
     <input type="submit" id="submit-btn" value="Продолжить">
@@ -78,9 +80,9 @@
         border: 2px solid white;
         color: white;
     }
-    #submit-btn{
+    #submit-btn {
         height: 50px;
-        width: 700px;
+        width: 200px;
         background: none;
         border: 2px solid white;
         transition: 0.5s all;

@@ -14,4 +14,8 @@ class Service extends Model
         'description',
         'is_active',
     ];
+    public function specialists()
+    {
+        return $this->belongsToMany(Specialist::class, 'specialist_services', 'service_id', 'specialist_id');
+    }
 }

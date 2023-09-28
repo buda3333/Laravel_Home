@@ -12,4 +12,9 @@ class SpecialistService extends Model
         'service_id',
         'specialist_id',
     ];
+    public function calendar()
+    {
+        return $this->hasMany(Calendar::class, 'specialist_service_id');
+    }
 }
+

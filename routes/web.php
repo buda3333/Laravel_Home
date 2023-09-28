@@ -6,8 +6,6 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\HomeController;
-use http\Client\Request;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\SpecialistController;
@@ -42,4 +40,5 @@ Route::get('/record2', [RecordControllerNew::class, 'index'])->name('register.re
 Route::post('/record2', [RecordControllerNew::class, 'index2']);
 Route::post('/record3', [RecordControllerNew::class, 'store'])->name('register.record3');
 Route::post('/record4', [RecordControllerNew::class, 'store2'])->name('register.record4');
-Route::post('/record5', [RecordControllerNew::class, 'create'])->name('register.record5');
+Route::post('/record5', [RecordControllerNew::class, 'code'])->name('register.record5');
+Route::post('/record6', [RecordControllerNew::class, 'create'])->name('register.record6');
