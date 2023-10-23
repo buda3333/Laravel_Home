@@ -22,13 +22,14 @@
         </ul>
         <a href=""><ion-icon name="reorder-three-outline" class="tablet mobile threeLines"></ion-icon></a>
         @auth
-            <a href="/logout" >Выйти</a>
-            <a href="/records/{{Auth::user()->id}}" >Все Записи</a>
+            <li><a href="/logout" >Выйти</a></li>
+            <li><a href="/records/{{Auth::user()->id}}" >Все Записи</a></li>
         @endauth
-        <a href="/record2" >Record</a>
+        <li><a href="/record2" >Record пошагово</a></li>
+        <li><a href="/record" >Record Java</a></li>
         @guest
-        <a href="/login" >Вход</a>
-        <a href="/registration" >Зарегистрироваться</a>
+            <li><a href="/login" >Вход</a></li>
+            <li><a href="/registration" >Зарегистрироваться</a></li>
         @endguest
     </nav>
 </header>

@@ -55,9 +55,9 @@ class RecordControllerNew extends Controller
         $service_id = session('service_id');
         $specialistService= SpecialistService::where('service_id', $service_id)
             ->where('specialist_id', $specialist_id)
-            ->with('calendar')->first();
+            ->with('calendars')->first();
         $records = Record::where('specialist_id', $specialist_id)->get();
-        $lableCalendars = $specialistService->calendar->reject(function ($calendar) use ($records) {
+        $calendars = $specialistService->calendars->reject(function ($calendar) use ($records) {
             foreach ($records as $record) {
                 if ($calendar->date == $record->date && $calendar->time == $record->time) {
                     return true;
@@ -65,7 +65,7 @@ class RecordControllerNew extends Controller
             }
             return false;
         });
-        return response(view('record.index5', ['calendars' => $lableCalendars]));
+        return response(view('record.index5', ['calendars' => $calendars]));
     }
     public function code(Request $request,SmsSender $smsSender){
         $phoneNumber = $request->phone;

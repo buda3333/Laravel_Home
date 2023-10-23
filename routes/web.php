@@ -1,11 +1,14 @@
 <?php
 
+use App\Http\Controllers\PhoneController;
 use App\Http\Controllers\RecordController;
 use App\Http\Controllers\RecordControllerNew;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\HomeController;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\SpecialistController;
@@ -42,3 +45,18 @@ Route::post('/record3', [RecordControllerNew::class, 'store'])->name('register.r
 Route::post('/record4', [RecordControllerNew::class, 'store2'])->name('register.record4');
 Route::post('/record5', [RecordControllerNew::class, 'code'])->name('register.record5');
 Route::post('/record6', [RecordControllerNew::class, 'create'])->name('register.record6');
+Route::post('/verify-phone', [PhoneController::class,'verify'])->name('verify.phone');
+Route::post('/confirm-code', [PhoneController::class,'confirm']);
+Route::get('/email/verify', function () {
+    return view('auth.verify-email');
+})->middleware('auth')->name('verification.notice');
+
+Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+    $request->fulfill();
+    return redirect('/home');
+})->middleware(['auth', 'signed'])->name('verification.verify');
+
+Route::post('/email/verification-notification', function (Request $request) {
+    $request->user()->sendEmailVerificationNotification();
+    return back()->with('message', 'Verification link sent!');
+})->middleware(['auth', 'throttle:6,1'])->name('verification.send');

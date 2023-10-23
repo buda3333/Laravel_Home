@@ -1,18 +1,22 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <body>
-<form action="{{ route('register.record') }}" method="post" class="container">
+<form action="{{ route('register.cod') }}" method="post" class="container">
     @csrf
-    <h1>Записи</h1>
+    <h1>Записаться</h1>
     <h3>Ваши Данные</h3>
-    <div class="service-buttons">
-        @foreach ($records as $record)
-            {{ $record->specialist_id}}
-            {{ $record->service_id}}
-            {{ $record->date}}
-            {{ $record->time}}
-        @endforeach
+    <div class="pr-dtl">
+        <div class="input-div">
+            <label for="name">Код из смс:</label><label style="color: #4b1010">@if(isset($error) && !empty($error))
+                    <div class="alert alert-danger">
+                        {{ $error }}
+                    </div>
+                @endif</label>
+            <input type="text" id="code" name="code">
+        </div>
     </div>
+    <input type="submit" id="submit-btn" value="Записаться">
+
 </form>
 <video class="bg-effect" muted autoplay>
     <source src="https://regestrationpage.glitch.me/smoke_video.mp4" type="video/mp4">
@@ -79,9 +83,9 @@
         border: 2px solid white;
         color: white;
     }
-    #submit-btn{
+    #submit-btn {
         height: 50px;
-        width: 700px;
+        width: 200px;
         background: none;
         border: 2px solid white;
         transition: 0.5s all;
@@ -174,32 +178,4 @@
             transform: rotate(90deg);
         }
     }
-    /* Add this to your existing CSS */
-
-    .service-buttons {
-        display: flex;
-        flex-direction: column; /* Stack buttons vertically */
-        align-items: center; /* Center buttons horizontally */
-        grid-gap: 10px; /* Adjust the gap between buttons as needed */
-    }
-
-    .service-button {
-        height: 50px;
-        width: 200px; /* Adjust the width of the buttons */
-        padding: 10px 20px;
-        background: none;
-        border: 2px solid white;
-        color: white;
-        font-size: 18px;
-        cursor: pointer;
-        transition: background 0.5s, color 0.5s;
-        margin-bottom: 10px; /* Add spacing between buttons */
-    }
-
-    .service-button:hover {
-        color: black;
-        background: white;
-    }
-
-    /* You can adjust the button styling further as needed */
 </style>

@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\RecordRequest;
+use App\Models\Calendar;
 use App\Models\Record;
 use App\Models\Service;
 use App\Models\Specialist;
-use App\Models\Specialist_service;
 use App\Models\SpecialistService;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
@@ -19,12 +19,21 @@ class RecordController extends Controller
     public function index()
     {
         $services = Service::where('is_active',true)->get();
-        //$specialists = Specialist::all()->random(2);
-        $specialists = Specialist::whereNotIn('id', function($query) {
-            $query->select('specialist_id')->from('records')->where('status', 'adopted');
-        })->get();
+        $specialists = Specialist::get();
         $specialistServices = SpecialistService::get();
-        return view('record.index', ['services' => $services,'specialists' => $specialists,'specialistServices'=>$specialistServices]);
+        $calendars = Calendar::
+            leftJoin('specialist_services', 'calendars.specialist_service_id', '=', 'specialist_services.id')
+            ->leftJoin('records', function($join)
+            {
+                $join->on('specialist_services.specialist_id', '=', 'records.specialist_id')
+                    ->on('specialist_services.service_id', '=', 'records.service_id')
+                    ->on('calendars.date', '=', 'records.date')
+                    ->on('calendars.time', '=', 'records.time');
+            })
+            ->select('calendars.date', 'calendars.time','calendars.specialist_service_id')
+            ->whereNull('records.id')
+            ->get();
+        return view('record.indexGO', ['services' => $services,'specialists' => $specialists,'specialistServices'=>$specialistServices,'calendars' => $calendars]);
     }
 
     /**
@@ -58,48 +67,4 @@ class RecordController extends Controller
         return response(view('record.record', ['records' => $records]));
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Record  $record
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Record $record)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Record  $record
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Record $record)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Record  $record
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Record $record)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Record  $record
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Record $record)
-    {
-        //
-    }
 }

@@ -13,4 +13,12 @@ class Calendar extends Model
         'date',
         'time',
     ];
+    public function specialistservice()
+    {
+        return $this->belongsTo(SpecialistService::class, 'specialist_service_id');
+    }
+    public function records()
+    {
+        return $this->hasMany(Record::class);
+    }
 }

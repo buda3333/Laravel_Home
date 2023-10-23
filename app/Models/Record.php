@@ -17,4 +17,13 @@ class Record extends Model
         'time',
         'phone',
     ];
+    public function specialist()
+    {
+        return $this->belongsTo(Specialist::class, 'specialist_id');
+    }
+
+    public function service()
+    {
+        return $this->belongsTo(Service::class, 'service_id');
+    }
 }

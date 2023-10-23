@@ -12,9 +12,14 @@ class SpecialistService extends Model
         'service_id',
         'specialist_id',
     ];
-    public function calendar()
+    public function calendars()
     {
         return $this->hasMany(Calendar::class, 'specialist_service_id');
+    }
+    public function records()
+    {
+        return $this->hasMany(Record::class, 'specialist_id', 'specialist_id')
+            ->where('service_id', $this->service_id);
     }
 }
 

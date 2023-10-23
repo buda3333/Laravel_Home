@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\RegisterRequest;
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -33,6 +34,7 @@ class RegisterController extends Controller
     {
         $user = User::create($request->validated());
         auth()->login($user);
-        return redirect('/home')->with('success', "Account successfully registered.");
+        event(new Registered($user));
+        return redirect('/email/verify')->with('success', "Account successfully registered. Please verify your email.");
     }
 }
