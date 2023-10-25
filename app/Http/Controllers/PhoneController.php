@@ -39,7 +39,7 @@ class PhoneController extends Controller
             ->first();
 
         if($verificationNumber && $verificationNumber->code == $code){
-            $verificationNumber->verification = true;
+            $verificationNumber->is_verification = true;
             $verificationNumber->save();
             $status = true;
             $message = 'Код подтвержден';

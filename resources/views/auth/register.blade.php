@@ -8,7 +8,7 @@
 <form action="{{ route('register.perform') }}" method="post">
     @csrf
     <div class="container">
-    <label>Username</label> <label style="color: #4b1010">@error('name') {{ $message }} @enderror</label>
+    <label>Name</label> <label style="color: #4b1010">@error('name') {{ $message }} @enderror</label>
     <input type="text" name="name" value="{{ old('name') }}" placeholder="Enter Username">
     <label>Email</label> <label style="color: #4b1010">@error('email') {{ $message }} @enderror</label>
     <input type="text" name="email" value="{{ old('email') }}" placeholder="Enter Email">

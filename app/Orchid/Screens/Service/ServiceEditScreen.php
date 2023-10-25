@@ -6,106 +6,88 @@ namespace App\Orchid\Screens\Service;
 
 use App\Models\Service;
 use App\Orchid\Layouts\Service\ServiceEditLayout;
-use App\Orchid\Layouts\Service\ServicePermissionLayout;
-use Illuminate\Notifications\Action;
+use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use Orchid\Access\Impersonation;
+use Orchid\Platform\Models\User;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Screen;
+use Orchid\Support\Color;
 use Orchid\Support\Facades\Layout;
 use Orchid\Support\Facades\Toast;
 
 class ServiceEditScreen extends Screen
 {
+
     public $service;
+
+
     public function query(Service $service): iterable
     {
         return [
-            'service'       => $service,
-            'permission' => $service->getStatusPermission(),
+            'service' => $service,
         ];
     }
+
     public function name(): ?string
     {
-        return 'Manage services';
+        return $this->service->exists ? 'Edit Service' : 'Create Service';
     }
     public function description(): ?string
     {
-        return 'All create services';
+        return 'Details such';
     }
 
-    public function permission(): ?iterable
+    /*public function permission(): ?iterable
     {
         return [
             'platform.systems.services',
         ];
-    }
-
-    /**
-     * The screen's action buttons.
-     *
-     * @return Action[]
-     */
+    }*/
     public function commandBar(): iterable
     {
         return [
+            Button::make(__('Remove'))
+                ->icon('trash')
+                ->confirm(__('Once the account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.'))
+                ->method('remove')
+                ->canSee($this->service->exists),
+
             Button::make(__('Save'))
                 ->icon('check')
                 ->method('save'),
-
-            Button::make(__('Remove'))
-                ->icon('trash')
-                ->method('remove')
-                ->canSee($this->service->exists),
         ];
     }
 
     /**
-     * The screen's layout elements.
-     *
-     * @return string[]|\Orchid\Screen\Layout[]
+     * @return \Orchid\Screen\Layout[]
      */
     public function layout(): iterable
     {
         return [
-            Layout::block([
-                ServiceEditLayout::class,
-            ])
-                ->title('Service')
-                ->description('HELP1'),
 
-            Layout::block([
-                ServicePermissionLayout::class,
-            ])
-                ->title('HELP2')
-                ->description('HELP3'),
+            Layout::block(ServiceEditLayout::class)
+                ->title(__('Information'))
+                ->description(__('Update your Service.'))
+                ->commands(
+                    Button::make(__('Save'))
+                        ->type(Color::DEFAULT())
+                        ->icon('check')
+                        ->canSee($this->service->exists)
+                        ->method('save')
+                ),
         ];
     }
-
-    /**
-     * @param Request $request
-     * @param Role    $role
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function save(Request $request, Service $service)
+    public function save(Service $service, Request $request)
     {
         $request->validate([
-            'service.slug' => [
+            'service.name' => [
                 'required',
-                Service::unique(Service::class, 'slug')->ignore($service),
+                Rule::unique(Service::class, 'name')->ignore($service),
             ],
         ]);
-
-        $service->fill($request->get('service'));
-
-        $service->permissions = collect($request->get('permissions'))
-            ->map(fn ($value, $key) => [base64_decode($key) => $value])
-            ->collapse()
-            ->toArray();
-
-        $service->save();
-
-        Toast::info(__('Service was saved'));
-
+        $service->fill($request->input('service'))->save();
+        Toast::info(__('Service was saved.'));
         return redirect()->route('platform.systems.services');
     }
 
@@ -117,4 +99,5 @@ class ServiceEditScreen extends Screen
 
         return redirect()->route('platform.systems.services');
     }
+
 }

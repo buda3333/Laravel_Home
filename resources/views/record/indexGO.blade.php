@@ -4,10 +4,10 @@
 <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
 <body>
 
-<h1>Запись</h1>
+
 <form id="regForm" action="{{ route('register.record') }}" method="post">
     @csrf
-    <h1>Регистрация:</h1>
+    <h1>Запись:</h1>
     <!-- Одна "вкладка" для каждого шага в форме: -->
     <div class="tab">Ваше имя:
         <p><input placeholder="Имя..." oninput="this.className = ''" name="name"></p>

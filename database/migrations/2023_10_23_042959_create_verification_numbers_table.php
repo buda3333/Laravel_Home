@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('phone');
             $table->string('code');
-            $table->boolean('verification')->default(false);
+            $table->boolean('is_verification')->default(false);
             $table->timestamps();
         });
     }
