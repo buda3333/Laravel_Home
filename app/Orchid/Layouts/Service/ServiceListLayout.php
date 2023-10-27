@@ -26,6 +26,13 @@ class ServiceListLayout extends Table
     public function columns(): array
     {
         return [
+            TD::make('id', __('ID'))
+                ->sort()
+                ->cantHide()
+                ->filter(Input::make())
+                ->render(function (Service $service) {
+                    return $service->id;
+                }),
             TD::make('name', __('Name'))
                 ->sort()
                 ->cantHide()
@@ -47,12 +54,20 @@ class ServiceListLayout extends Table
                 ->sort()
                 ->cantHide()
                 ->filter(Input::make())
-                ->render(fn (Service $service) => ModalToggle::make((string) $service->price)
-                    ->modalTitle((string) $service->price)
+                ->render(fn (Service $service) => ModalToggle::make((string)($service->price))
+                    ->modal('asyncEditServiceModal')
+                    ->modalTitle('price')
                     ->method('saveService')
                     ->asyncParameters([
                         'service' => $service->id,
                     ])),
+            TD::make('is_active', __('Active'))
+                ->sort()
+                ->cantHide()
+                ->filter(Input::make())
+                ->render(function (Service $service) {
+                    return $service->is_active ? __('Active') : __('Inactive');
+                }),
 
             TD::make('updated_at', __('Last edit'))
                 ->sort()
