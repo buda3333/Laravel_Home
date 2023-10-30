@@ -31,16 +31,17 @@ class ConsumeCommand extends Command
         $connection = new AMQPStreamConnection('rabbitmq', 5672, 'user', 'user');
         $channel = $connection->channel();
 
-        $channel->queue_declare('hello', false, true, false, false);
+        $channel->queue_declare('Registration', false, true, false, false);
 
         echo " [*] Waiting for messages. To exit press CTRL+C\n";
 
 
         $callback = function ($msg) {
-            echo ' [x] Received ', $msg->body, "\n";
+            $user = json_encode($msg->body);
+            print_r($user);
         };
 
-        $channel->basic_consume('hello', '', false, true, false, false, $callback);
+        $channel->basic_consume('Registration', '', false, true, false, false, $callback);
 
         try {
             $channel->consume();

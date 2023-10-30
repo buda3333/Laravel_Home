@@ -18,21 +18,6 @@ class LogoutController extends Controller
     {
         Session::flush();
         Auth::logout();
-
-
-
-        $connection = new AMQPStreamConnection('rabbitmq', 5672, 'user', 'user');
-        $channel = $connection->channel();
-
-        $channel->queue_declare('hello', false, true, false, false);
-
-        $msg = new AMQPMessage('Exit!');
-        $channel->basic_publish($msg, '', 'hello');
-
-
-        $channel->close();
-        $connection->close();
-
         return redirect('home');
     }
 }

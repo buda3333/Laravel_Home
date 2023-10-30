@@ -14,7 +14,7 @@ class PhoneController extends Controller
         $text = rand(1000, 9999);
 
         try {
-            //$smsSender->send($phoneNumber, $text);
+            $smsSender->send($phoneNumber, $text);
             $status = true;
             $message = 'SMS sent successfully.';
             VerificationNumber::create([

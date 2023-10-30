@@ -5,7 +5,10 @@ namespace App\Orchid\Screens\Record;
 use App\Models\Record;
 use App\Orchid\Layouts\Record\RecordListLayout;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Screen;
+use Orchid\Support\Facades\Layout;
 use Orchid\Support\Facades\Toast;
 
 class RecordListScreen extends Screen
@@ -39,7 +42,11 @@ class RecordListScreen extends Screen
      */
     public function commandBar() : array
     {
-        return [];
+        return [
+            Link::make(__('Add'))
+                ->icon('plus')
+                ->route('platform.systems.records.create'),
+        ];
     }
 
     /**
@@ -51,7 +58,28 @@ class RecordListScreen extends Screen
     {
         return [
             RecordListLayout::class,
+            Layout::modal('asyncEditRecordModal', RecordListLayout::class)
+                ->async('asyncGetRecord'),
         ];
+    }
+    public function asyncGetRecord(Record $record): iterable
+    {
+        return [
+            'record' => $record,
+        ];
+    }
+    public function saveRecord(Request $request, Record $record): void
+    {
+        $request->validate([
+            'service.name' => [
+                'required',
+                Rule::unique(Record::class, 'name')->ignore($record),
+            ],
+        ]);
+
+        $record->fill($request->input('record'))->save();
+
+        Toast::info(__('Record was saved.'));
     }
     public function remove(Request $request): void
     {

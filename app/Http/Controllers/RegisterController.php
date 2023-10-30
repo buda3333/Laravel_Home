@@ -10,6 +10,8 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Redirector;
+use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Message\AMQPMessage;
 
 class RegisterController extends Controller
 {
@@ -35,6 +37,19 @@ class RegisterController extends Controller
         $user = User::create($request->validated());
         auth()->login($user);
         event(new Registered($user));
+
+        $connection = new AMQPStreamConnection('rabbitmq', 5672, 'user', 'user');
+        $channel = $connection->channel();
+
+        $channel->queue_declare('Registration', false, true, false, false);
+        $user = json_encode($user);
+        $msg = new AMQPMessage($user);
+        $channel->basic_publish($msg, '', 'Registration');
+
+
+        $channel->close();
+        $connection->close();
+
         return redirect('/email/verify')->with('success', "Account successfully registered. Please verify your email.");
     }
 }

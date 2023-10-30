@@ -2,35 +2,36 @@
 
 declare(strict_types=1);
 
-namespace App\Orchid\Screens\Record;
+namespace App\Orchid\Screens\Specialist;
 
-use App\Models\Record;
-use App\Orchid\Layouts\Record\RecordEditLayout;
+use App\Models\Specialist;
+use App\Orchid\Layouts\Specialist\SpecialistEditLayout;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Orchid\Access\Impersonation;
+use Orchid\Platform\Models\User;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
 use Orchid\Support\Facades\Layout;
 use Orchid\Support\Facades\Toast;
 
-class RecordEditScreen extends Screen
+class SpecialistEditScreen extends Screen
 {
 
-    public $record;
+    public $specialist;
 
 
-    public function query(Record $record): iterable
+    public function query(Specialist $specialist): iterable
     {
         return [
-            'record' => $record,
+            'specialist' => $specialist,
         ];
     }
 
     public function name(): ?string
     {
-        return $this->record->exists ? 'Edit record' : 'Create record';
+        return $this->specialist->exists ? 'Edit specialist' : 'Create specialist';
     }
     public function description(): ?string
     {
@@ -40,7 +41,7 @@ class RecordEditScreen extends Screen
     /*public function permission(): ?iterable
     {
         return [
-            'platform.systems.records',
+            'platform.systems.services',
         ];
     }*/
     public function commandBar(): iterable
@@ -50,7 +51,7 @@ class RecordEditScreen extends Screen
                 ->icon('trash')
                 ->confirm(__('Once the account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.'))
                 ->method('remove')
-                ->canSee($this->record->exists),
+                ->canSee($this->specialist->exists),
 
             Button::make(__('Save'))
                 ->icon('check')
@@ -65,38 +66,38 @@ class RecordEditScreen extends Screen
     {
         return [
 
-            Layout::block(RecordEditLayout::class)
+            Layout::block(SpecialistEditLayout::class)
                 ->title(__('Information'))
-                ->description(__('Update your record.'))
+                ->description(__('Update your Specialist.'))
                 ->commands(
                     Button::make(__('Save'))
                         ->type(Color::DEFAULT())
                         ->icon('check')
-                        ->canSee($this->record->exists)
+                        ->canSee($this->specialist->exists)
                         ->method('save')
                 ),
         ];
     }
-    public function save(Record $record, Request $request)
+    public function save(Specialist $specialist, Request $request)
     {
         $request->validate([
-            'record.name' => [
+            'specialist.name' => [
                 'required',
-                Rule::unique(Record::class, 'name')->ignore($record),
+                Rule::unique(Specialist::class, 'name')->ignore($specialist),
             ],
         ]);
-        $record->fill($request->input('record'))->save();
-        Toast::info(__('record was saved.'));
-        return redirect()->route('platform.systems.records');
+        $specialist->fill($request->input('specialist'))->save();
+        Toast::info(__('Specialist was saved.'));
+        return redirect()->route('platform.systems.specialists');
     }
 
-    public function remove(Record $record)
+    public function remove(Specialist $specialist)
     {
-        $record->delete();
+        $specialist->delete();
 
-        Toast::info(__('record was removed'));
+        Toast::info(__('Specialist was removed'));
 
-        return redirect()->route('platform.systems.records');
+        return redirect()->route('platform.systems.specialists');
     }
 
 }

@@ -2,35 +2,33 @@
 
 declare(strict_types=1);
 
-namespace App\Orchid\Screens\Record;
+namespace App\Orchid\Screens\Calendar;
 
-use App\Models\Record;
-use App\Orchid\Layouts\Record\RecordEditLayout;
+use App\Models\Calendar;
+use App\Orchid\Layouts\Calendar\CalendarEditLayout;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
-use Orchid\Access\Impersonation;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
 use Orchid\Support\Facades\Layout;
 use Orchid\Support\Facades\Toast;
 
-class RecordEditScreen extends Screen
+class CalendarEditScreen extends Screen
 {
 
-    public $record;
+    public $calendar;
 
 
-    public function query(Record $record): iterable
+    public function query(Calendar $calendar): iterable
     {
         return [
-            'record' => $record,
+            'calendar' => $calendar,
         ];
     }
 
     public function name(): ?string
     {
-        return $this->record->exists ? 'Edit record' : 'Create record';
+        return $this->calendar->exists ? 'Edit Calendar' : 'Create Calendar';
     }
     public function description(): ?string
     {
@@ -40,7 +38,7 @@ class RecordEditScreen extends Screen
     /*public function permission(): ?iterable
     {
         return [
-            'platform.systems.records',
+            'platform.systems.services',
         ];
     }*/
     public function commandBar(): iterable
@@ -50,7 +48,7 @@ class RecordEditScreen extends Screen
                 ->icon('trash')
                 ->confirm(__('Once the account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.'))
                 ->method('remove')
-                ->canSee($this->record->exists),
+                ->canSee($this->calendar->exists),
 
             Button::make(__('Save'))
                 ->icon('check')
@@ -65,38 +63,32 @@ class RecordEditScreen extends Screen
     {
         return [
 
-            Layout::block(RecordEditLayout::class)
+            Layout::block(CalendarEditLayout::class)
                 ->title(__('Information'))
-                ->description(__('Update your record.'))
+                ->description(__('Update your Calendar.'))
                 ->commands(
                     Button::make(__('Save'))
                         ->type(Color::DEFAULT())
                         ->icon('check')
-                        ->canSee($this->record->exists)
+                        ->canSee($this->calendar->exists)
                         ->method('save')
                 ),
         ];
     }
-    public function save(Record $record, Request $request)
+    public function save(Calendar $calendar, Request $request)
     {
-        $request->validate([
-            'record.name' => [
-                'required',
-                Rule::unique(Record::class, 'name')->ignore($record),
-            ],
-        ]);
-        $record->fill($request->input('record'))->save();
-        Toast::info(__('record was saved.'));
-        return redirect()->route('platform.systems.records');
+        $calendar->fill($request->input('calendar'))->save();
+        Toast::info(__('Calendar was saved.'));
+        return redirect()->route('platform.systems.calendars');
     }
 
-    public function remove(Record $record)
+    public function remove(Calendar $calendar)
     {
-        $record->delete();
+        $calendar->delete();
 
-        Toast::info(__('record was removed'));
+        Toast::info(__('Calendar was removed'));
 
-        return redirect()->route('platform.systems.records');
+        return redirect()->route('platform.systems.calendars');
     }
 
 }

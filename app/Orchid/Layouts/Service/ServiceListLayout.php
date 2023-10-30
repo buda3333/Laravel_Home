@@ -33,6 +33,7 @@ class ServiceListLayout extends Table
                 ->render(function (Service $service) {
                     return $service->id;
                 }),
+
             TD::make('name', __('Name'))
                 ->sort()
                 ->cantHide()
@@ -40,7 +41,6 @@ class ServiceListLayout extends Table
                 ->render(function (Service $service) {
                     return Link::make($service->name)->route('platform.systems.services.edit', ['service' => $service->id]);
                 }),
-
 
             TD::make('description', __('Description'))
                 ->sort()
