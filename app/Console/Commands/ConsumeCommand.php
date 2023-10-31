@@ -2,6 +2,8 @@
 
 namespace App\Console\Commands;
 
+use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Console\Command;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 
@@ -37,8 +39,10 @@ class ConsumeCommand extends Command
 
 
         $callback = function ($msg) {
-            $user = json_encode($msg->body);
-            print_r($user);
+            $id = json_decode($msg->body)->id;
+            $user = User::find($id);
+            event(new Registered($user));
+
         };
 
         $channel->basic_consume('Registration', '', false, true, false, false, $callback);

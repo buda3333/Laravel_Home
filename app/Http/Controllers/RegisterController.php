@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\RegisterRequest;
 use App\Models\User;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -36,14 +35,15 @@ class RegisterController extends Controller
     {
         $user = User::create($request->validated());
         auth()->login($user);
-        event(new Registered($user));
+        //event(new Registered($user));
 
         $connection = new AMQPStreamConnection('rabbitmq', 5672, 'user', 'user');
         $channel = $connection->channel();
 
         $channel->queue_declare('Registration', false, true, false, false);
-        $user = json_encode($user);
-        $msg = new AMQPMessage($user);
+        $user = ['id' => $user->id];
+        $jsonUser = json_encode($user);
+        $msg = new AMQPMessage($jsonUser);
         $channel->basic_publish($msg, '', 'Registration');
 
 
