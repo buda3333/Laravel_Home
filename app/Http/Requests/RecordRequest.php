@@ -25,6 +25,9 @@ class RecordRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'min:4', 'max:24'],
+            'phone' => ['required', 'string', 'min:10', 'max:24'],
+            'specialist_id' => ['required', 'int'],
+            'service_id' => ['required', 'int'],
         ];
     }
 }
