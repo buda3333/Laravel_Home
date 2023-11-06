@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\VerificationNumber;
 use Exception;
+use Illuminate\Support\Facades\Log;
 use Nutnet\LaravelSms\SmsSender;
 
 class VerificationPhoneService
@@ -12,7 +13,8 @@ class VerificationPhoneService
     public function __construct(protected SmsSender $smsSender)
     {
     }
-    public function verify($phoneNumber): array
+
+    public function verify($phoneNumber)
     {
         $text = rand(1000, 9999);
 
@@ -22,9 +24,10 @@ class VerificationPhoneService
                 'phone' => $phoneNumber,
                 'code' => $text,
             ]);
-            return ['success' => true, 'message' => 'SMS sent successfully.'];
+            return ['success' => true];
         } catch (Exception $e) {
-            return ['success' => false, 'message' => 'SMS sending failed. ' . $e->getMessage()];
+            log::error($e);
+            return ['success' => false];
         }
     }
 
@@ -34,13 +37,19 @@ class VerificationPhoneService
             ->orderBy('created_at', 'desc')
             ->first();
 
-        if ($verificationNumber && !$verificationNumber->is_verification && $verificationNumber->code == $code) {
-            $verificationNumber->is_verification = true;
-            $verificationNumber->save();
-
-            return ['success' => true, 'message' => 'Код подтвержден'];
-        } else {
-            return ['success' => false, 'message' => 'Код не подтвержден'];
+        if (!$verificationNumber) {
+            return ['success' => false];
         }
+
+        if ($verificationNumber->is_verification || $verificationNumber->code != $code) {
+            return ['success' => false];
+        }
+
+        $verificationNumber->is_verification = true;
+        $verificationNumber->save();
+
+        return ['success' => true];
     }
+
+
 }
