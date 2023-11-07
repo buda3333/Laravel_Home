@@ -17,22 +17,12 @@ class RecordController extends Controller
 {
     public function index()
     {
-        $services = Service::where('is_active',true)->get();
-        $specialists = Specialist::get();
-        $specialistServices = SpecialistService::get();
-        $calendars = Calendar::
-            leftJoin('specialist_services', 'calendars.specialist_service_id', '=', 'specialist_services.id')
-            ->leftJoin('records', function($join)
-            {
-                $join->on('specialist_services.specialist_id', '=', 'records.specialist_id')
-                    ->on('specialist_services.service_id', '=', 'records.service_id')
-                    ->on('calendars.date', '=', 'records.date')
-                    ->on('calendars.time', '=', 'records.time');
-            })
-            ->select('calendars.date', 'calendars.time','calendars.specialist_service_id')
-            ->whereNull('records.id')
-            ->get();
-        return view('record.indexGO', ['services' => $services,'specialists' => $specialists,'specialistServices'=>$specialistServices,'calendars' => $calendars]);
+        return view('record.indexGO', [
+            'services' => Service::where('is_active',true)->get(),
+            'specialists' => Specialist::get(),
+            'specialistServices' => SpecialistService::get(),
+            'calendars' => Calendar::getFreeCalendars()
+        ]);
     }
 
     /**
@@ -43,13 +33,11 @@ class RecordController extends Controller
     public function create(RecordRequest $request)
     {
         $record = new Record();
+        $data = $request->all();
         if (Auth::check()) {
-            $data = $request->all();
             $data['user_id'] = Auth::user()->id;
-            $record->fill($data);
-        } else {
-            $record->fill($request->all());
         }
+        $record->fill($data);
         $record->save();
         return redirect('/home');
     }

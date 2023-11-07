@@ -14,7 +14,7 @@ class VerificationPhoneService
     {
     }
 
-    public function verify($phoneNumber)
+    public function verify(string $phoneNumber):bool
     {
         $text = rand(1000, 9999);
 
@@ -24,31 +24,31 @@ class VerificationPhoneService
                 'phone' => $phoneNumber,
                 'code' => $text,
             ]);
-            return ['success' => true];
+            return true;
         } catch (Exception $e) {
             log::error($e);
-            return ['success' => false];
+            return false;
         }
     }
 
-    public function confirm($phoneNumber, int $code): array
+    public function confirm(string $phoneNumber, int $code):bool
     {
         $verificationNumber = VerificationNumber::where('phone', $phoneNumber)
             ->orderBy('created_at', 'desc')
             ->first();
 
         if (!$verificationNumber) {
-            return ['success' => false];
+            return false;
         }
 
         if ($verificationNumber->is_verification || $verificationNumber->code != $code) {
-            return ['success' => false];
+            return false;
         }
 
         $verificationNumber->is_verification = true;
         $verificationNumber->save();
 
-        return ['success' => true];
+        return true;
     }
 
 

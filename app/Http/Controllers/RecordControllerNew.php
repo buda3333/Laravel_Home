@@ -12,6 +12,9 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Nutnet\LaravelSms\SmsSender;
+/**
+ *@deprecated
+ */
 class RecordControllerNew extends Controller
 {
     /**
@@ -70,7 +73,7 @@ class RecordControllerNew extends Controller
     public function code(Request $request,SmsSender $smsSender){
         $phoneNumber = $request->phone;
         $text=rand(1000,9999);
-        //$smsSender->send($phoneNumber, $text);
+        $smsSender->send($phoneNumber, $text);
         $request->session()->put(['date' => $request->date,'time' => $request->time, 'phone' => $phoneNumber,'code' => $text,]);
         print_r($text);
         return response(view('record.indexCode'));
