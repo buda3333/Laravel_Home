@@ -30,8 +30,14 @@ class RabbitMQService
 
         echo " [*] Waiting for messages. To exit press CTRL+C\n";
 
-        $this->channel->basic_consume($queue, '', false, true,
-            false, false, function ($msg) use ($callback) {
+        $this->channel->basic_consume(
+            $queue,
+            '',
+            false,
+            true,
+            false,
+            false,
+            function ($msg) use ($callback) {
             call_user_func($callback, $msg->body);
         });
 
