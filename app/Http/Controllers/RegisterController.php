@@ -40,7 +40,7 @@ class RegisterController extends Controller
         auth()->login($user);
         $data=['id' => $user->id];
         $queue='Registration';
-        $this->rabbitMQService->sendMessage($queue,$data);
+        $this->rabbitMQService->publish($queue,$data);
         return redirect('/email/verify')
             ->with('success', "Account successfully registered. Please verify your email.");
     }

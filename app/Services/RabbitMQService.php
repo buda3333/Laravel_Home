@@ -8,29 +8,30 @@ use PhpAmqpLib\Message\AMQPMessage;
 class RabbitMQService
 {
     protected AMQPStreamConnection $connection;
-    protected $channel;
     public function __construct()
     {
         $this->connection = new AMQPStreamConnection('rabbitmq', 5672, 'user', 'user');
-        $this->channel = $this->connection->channel();
+
     }
 
-    public function sendMessage(string $queue, array $data)
+    public function publish(string $queue, array $data)
     {
-        $this->channel->queue_declare($queue, false, true, false, false);
+        $channel = $this->connection->channel();
+        $channel->queue_declare($queue, false, true, false, false);
         $jsonMessage = json_encode($data);
         $msg = new AMQPMessage($jsonMessage);
-        $this->channel->basic_publish($msg, '', $queue);
-        $this->channel->close();
+        $channel->basic_publish($msg, '', $queue);
+        $channel->close();
         $this->connection->close();
     }
-    public function getMessage($queue,$callback)
+    public function consume(string $queue, callable $callback)
     {
-        $this->channel->queue_declare($queue, false, true, false, false);
+        $channel = $this->connection->channel();
+        $channel->queue_declare($queue, false, true, false, false);
 
         echo " [*] Waiting for messages. To exit press CTRL+C\n";
 
-        $this->channel->basic_consume(
+        $channel->basic_consume(
             $queue,
             '',
             false,
@@ -41,10 +42,10 @@ class RabbitMQService
             call_user_func($callback, $msg->body);
         });
 
-        while (count($this->channel->callbacks)) {
-            $this->channel->wait();
+        while (count($channel->callbacks)) {
+            $channel->wait();
         }
-        $this->channel->close();
+        $channel->close();
         $this->connection->close();
     }
 

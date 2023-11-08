@@ -16,6 +16,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
+        $schedule->command('sms:send')->timezone('Asia/Irkutsk')->at('2:35');
     }
 
     /**
@@ -26,7 +27,7 @@ class Kernel extends ConsoleKernel
     protected function commands()
     {
         $this->load(__DIR__.'/Commands');
-
         require base_path('routes/console.php');
+        $this->commands='App\Console\Commands\SendScheduledSms';
     }
 }

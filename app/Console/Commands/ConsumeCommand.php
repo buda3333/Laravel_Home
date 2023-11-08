@@ -34,10 +34,11 @@ class ConsumeCommand extends Command
     public function handle()
     {
         $rabbitMQService= new RabbitMQService();
-        $rabbitMQService->getMessage('Registration', function ($body) {
+        $rabbitMQService->consume('Registration', function ($body) {
             $id = json_decode($body)->id;
             $user = User::find($id);
             event(new Registered($user));
         });
+        echo " [*] Waiting for messages. To exit press CTRL+C\n";
     }
 }
