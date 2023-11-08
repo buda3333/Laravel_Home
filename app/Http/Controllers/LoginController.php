@@ -8,7 +8,9 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use App\Http\Requests\LoginRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Validation\ValidationException;
+use Laravel\Socialite\Facades\Socialite;
 
 class LoginController extends Controller
 {
@@ -56,5 +58,19 @@ class LoginController extends Controller
     protected function authenticated(Request $request, $user)
     {
         return redirect()->intended('home');
+    }
+
+    public function redirectToVk()
+    {
+        return Socialite::driver('vkontakte')->redirect();
+    }
+
+    public function handleVkCallback()
+    {
+        $user = Socialite::driver('vkontakte')->user();
+
+        // Здесь можно сохранить данные пользователя в базу данных или выполнить другие действия
+
+        return Redirect::to('/home');
     }
 }

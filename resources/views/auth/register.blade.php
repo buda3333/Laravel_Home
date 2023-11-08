@@ -19,6 +19,7 @@
     <label>Password Confirmation</label> <label style="color: #4b1010">@error('password_confirmation') {{ $message }} @enderror</label>
     <input type="password" name="password_confirmation" placeholder="Enter Password">
     <button type="submit" class="register-btn">Register</button>
+        <a href="/login/vk">Войти через VK</a>
     <p>
         Do you already have an account? - <a href="{{ route('login.perform') }}">Log in</a>!
     </p>

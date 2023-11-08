@@ -64,3 +64,6 @@ Route::post('/email/verification-notification', function (Request $request) {
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
 Route::get('/telegram', [TelegramController::class, 'webhook']);
+
+Route::get('/login/vk', [LoginController::class, 'redirectToVk']);
+Route::get('/login/vk/callback', [LoginController::class, 'handleVkCallback']);
