@@ -23,7 +23,7 @@
         <a href=""><ion-icon name="reorder-three-outline" class="tablet mobile threeLines"></ion-icon></a>
         @auth
             <li><a href="/logout" >Выйти</a></li>
-            <li><a href="/records/{{Auth::user()->id}}" >Все Записи</a></li>
+            <li><a href="/record/{{Auth::user()->id}}" >Все Записи</a></li>
         @endauth
         <li><a href="/record2" >Record пошагово</a></li>
         <li><a href="/record" >Record Java</a></li>

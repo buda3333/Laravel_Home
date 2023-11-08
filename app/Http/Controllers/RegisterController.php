@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\RegisterRequest;
 use App\Models\User;
-use App\Services\VerificationEmailService;
+
+use App\Services\RabbitMQService;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -18,7 +19,7 @@ class RegisterController extends Controller
      *
      * @return Application|Factory|View
      */
-    public function __construct(protected VerificationEmailService $email)
+    public function __construct(protected RabbitMQService $rabbitMQService)
     {
     }
     public function show()
@@ -37,7 +38,9 @@ class RegisterController extends Controller
     {
         $user = User::create($request->validated());
         auth()->login($user);
-        $this->email->sendVerificationEmail($user);
+        $data=['id' => $user->id];
+        $queue='Registration';
+        $this->rabbitMQService->sendMessage($queue,$data);
         return redirect('/email/verify')
             ->with('success', "Account successfully registered. Please verify your email.");
     }

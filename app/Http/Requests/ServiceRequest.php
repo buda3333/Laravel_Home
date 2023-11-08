@@ -3,7 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-
+/**
+ *@deprecated
+ */
 class ServiceRequest extends FormRequest
 {
     /**

@@ -4,7 +4,9 @@ namespace App\Services;
 
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
-
+/**
+ *@deprecated
+ */
 class VerificationEmailService
 {
     public function sendVerificationEmail($user)

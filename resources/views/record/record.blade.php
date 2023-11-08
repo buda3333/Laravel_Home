@@ -11,6 +11,7 @@
             {{ $record->service_id}}
             {{ $record->date}}
             {{ $record->time}}
+            <button type="submit">Перезаписаться</button>
         @endforeach
     </div>
 </form>
@@ -28,7 +29,7 @@
         font-family: sans-serif;
         font-weight: 1000;
     }
-    input:-webkit-outer-spin-button,
+    input::-webkit-outer-spin-button,
     input::-webkit-inner-spin-button{
         -webkit-appearance: none;
     }

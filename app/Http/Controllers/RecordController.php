@@ -54,4 +54,9 @@ class RecordController extends Controller
         return response(view('record.record', ['records' => $records]));
     }
 
+    public function edit()
+    {
+return true;
+    }
+
 }
