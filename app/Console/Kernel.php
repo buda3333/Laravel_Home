@@ -7,6 +7,8 @@ use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 class Kernel extends ConsoleKernel
 {
+    protected $commands = [Commands\SendScheduledSms::class,
+    ];
     /**
      * Define the application's command schedule.
      *
@@ -16,7 +18,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
-        $schedule->command('sms:send')->timezone('Asia/Irkutsk')->at('2:35');
+        $schedule->command('sms:send')->timezone('Asia/Irkutsk')->at('23:19');
     }
 
     /**

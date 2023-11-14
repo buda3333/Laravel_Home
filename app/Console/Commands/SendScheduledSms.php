@@ -24,10 +24,9 @@ class SendScheduledSms extends Command
     {
         $records = Record::whereDate('date', '=', now()->addDay())->get();
         foreach ($records as $record) {
-            $text = "Ждем вас завтра в ".$record->time;
-            $phoneNumber = $record->phone;
-            $this->smsSender->send($phoneNumber, $text);
-            print_r($text);
+            $formattedTime = date("H-i", strtotime($record->time));
+            $text = "Ждем вас завтра в ".$formattedTime;
+            $this->smsSender->send($record->phone, $text);
         }
     }
 }
