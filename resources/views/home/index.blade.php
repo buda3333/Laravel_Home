@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800;900&family=Roboto:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
 </head>
 <body>
+@csrf
 <header>
     <nav>
         <ul>
@@ -33,6 +34,7 @@
         @endguest
     </nav>
 </header>
+
 <main>
     <section class="title">
         <section class="contentWrapper">
@@ -41,14 +43,53 @@
                     LAZER <br> Home
                 </h1>
                 <h5>
-                    Разделите свою уникальность
+                    Погода в вашем городе
+                </h5>
+                <h5>
+                    @foreach($cities as $city)
+                        <a href="#" class="city-link" data-code="{{$city->code}}">{{$city->name}}</a>
+                    @endforeach
+                        <div id="weather-info"></div>
+                        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                        <script>
+                            $(document).ready(function() {
+                                var selectedCity = sessionStorage.getItem('selectedCity');
+                                if (selectedCity) {
+                                    $.ajax({
+                                        url: '/weather/' + selectedCity,
+                                        method: 'GET',
+                                        success: function(response) {
+                                            $('#weather-info').html(response);
+                                        },
+                                        error: function(error) {
+                                            console.log(error);
+                                        }
+                                    });
+                                }
+                                $('.city-link').click(function(e) {
+                                    e.preventDefault();
+
+                                    var code = $(this).data('code');
+
+                                    $.ajax({
+                                        url: '/weather/' + code,
+                                        method: 'GET',
+                                        success: function(response) {
+                                            $('#weather-info').html(response);
+                                            sessionStorage.setItem('selectedCity', code);
+                                        },
+                                        error: function(error) {
+                                            console.log(error);
+                                        }
+                                    });
+                                });
+                            });
+                        </script>
                 </h5>
             </section>
-
         </section>
     </section>
     </section>
-
 
 
     <section class="services">
