@@ -1,6 +1,6 @@
 <html lang="eu">
 <div class="weather-info">
-    <h3>{{ $data['name'] }}</h3>
+    <h5>{{ $data['name'] }}</h5>
     <div class="temperature">
         <strong>Температура:</strong> {{ $data['main']['temp'] }}°C
     </div>
