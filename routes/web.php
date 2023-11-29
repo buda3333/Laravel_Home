@@ -9,7 +9,6 @@ use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\TelegramController;
 use App\Http\Controllers\WeatherController;
-use App\Services\WeatherService;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
